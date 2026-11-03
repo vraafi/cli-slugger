@@ -1,0 +1,68 @@
+{
+ "tri_layer": true,
+ "lulus": true,
+ "sah": true,
+ "vonis": "terima",
+ "bounce_ke": null,
+ "ringkas": "semua lapis lulus",
+ "lapis": {
+  "kode": {
+   "lapis": "kode",
+   "lulus": true,
+   "sah": true,
+   "vonis": "terima",
+   "temuan": [],
+   "catatan": [
+    "camus tidak dijalankan: target bukan proyek Node"
+   ],
+   "pembuat": "project-executor",
+   "peninjau": "quality-control-panel",
+   "camus": {
+    "ok": false,
+    "sah": false,
+    "tidak_berlaku": true,
+    "sebab": "target bukan proyek Node (tanpa package.json) — camus tidak berlaku"
+   },
+   "jumlah_berkas": {
+    "py": 1,
+    "js": 0,
+    "json": 0,
+    "lua": 0,
+    "lain": 1
+   },
+   "jumlah_diperiksa": 2,
+   "detik": 0.58,
+   "diperiksa": "2026-11-03T13:49:33+07:00"
+  },
+  "visual": {
+   "lapis": "visual",
+   "tidak_berlaku": true,
+   "lulus": true,
+   "sah": null,
+   "vonis": "tidak berlaku",
+   "temuan": [],
+   "sebab": "tidak ada URL UI",
+   "diperiksa": "2026-11-03T13:49:33+07:00"
+  },
+  "pengguna": {
+   "lapis": "pengguna",
+   "tidak_berlaku": true,
+   "lulus": true,
+   "sah": null,
+   "vonis": "tidak berlaku",
+   "temuan": [],
+   "sebab": "tidak ada URL UI",
+   "diperiksa": "2026-11-03T13:49:33+07:00"
+  }
+ },
+ "detik": 0.58,
+ "diperiksa": "2026-11-03T13:49:33+07:00",
+ "target": "C:\\Users\\user\\otonom-penuh\\workspace\\trust-test\\cli-slugger",
+ "url": null,
+ "uji_jalan": {
+  "ok": true,
+  "kode": 0,
+  "keluaran": "usage: slugger.py [-h] [--dry-run] [--pola POLA] path [path ...]\n\nGanti nama berkas massal menjadi slug aman.\n\npositional arguments:\n  path         Berkas atau direktori yang akan diproses. Direktori diproses\n               non-rekursif.\n\noptions:\n  -h, --help   show this help message and exit\n  --dry-run    Tampilkan rencana perubahan tanpa mengganti nama berkas.\n  --pola POLA  Pola nama baru (de",
+  "galat": ""
+ }
+}
