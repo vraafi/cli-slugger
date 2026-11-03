@@ -1,164 +1,180 @@
-"""
-Alat CLI untuk mengganti nama berkas massal menjadi slug yang aman.
+#!/usr/bin/env python3
+"""Slugger: alat CLI untuk mengganti nama berkas massal menjadi slug aman.
 
 Fitur:
-- Menghasilkan slug dari nama berkas (huruf kecil, spasi/karakter khusus diganti '-',
-  hanya huruf, angka, dan tanda hubung).
-- Mode --dry-run untuk pratinjau perubahan tanpa menyentuh berkas.
-- Pola penamaan --pola untuk mengatur format nama baru (misal: '{slug}{ext}').
-  Placeholder yang didukung: {slug}, {nama_asli}, {ext}.
-- Laporan sebelum/sesudah dalam format yang mudah diparse.
-- Menolak menimpa berkas yang sudah ada (exit code 2).
-- Menangani berkas tidak ada atau tidak bisa dibaca dengan pesan jelas (exit code 2).
+- Mengubah nama berkas menjadi slug aman (huruf kecil, tanpa karakter khusus).
+- Mode simulasi dengan --dry-run untuk melihat perubahan tanpa menyentuh berkas.
+- Filter berkas dengan --pola (glob).
+- Menampilkan laporan sebelum/sesudah.
+- Menolak menimpa berkas yang sudah ada.
+- Hanya menggunakan pustaka standar Python.
 
-Hanya menggunakan pustaka standar Python 3.11.
+Contoh:
+    slugger.py ./data
+    slugger.py ./data --dry-run --pola "*.txt"
 """
 
+from __future__ import annotations
+
 import argparse
-import os
 import re
 import sys
 import unicodedata
+from pathlib import Path
 
-__version__ = "1.0.0"
 
-EXIT_OK = 0
-EXIT_GAGAL = 1
-EXIT_FILE_ERROR = 2
+def slugify(nama: str) -> str:
+    """Ubah nama berkas menjadi slug aman.
 
-def buat_slug(teks: str) -> str:
-    """Mengubah teks menjadi slug aman: huruf kecil, angka, dan tanda hubung."""
-    teks = unicodedata.normalize("NFKD", teks)
+    Contoh: "Halo Dunia!.txt" -> "halo-dunia.txt"
+    """
+    path = Path(nama)
+    stem = path.stem
+    suffix = path.suffix.lower()
+
+    teks = unicodedata.normalize("NFKD", stem)
     teks = teks.encode("ascii", "ignore").decode("ascii")
     teks = teks.lower()
     teks = re.sub(r"[^a-z0-9]+", "-", teks)
     teks = teks.strip("-")
-    return teks or "berkas"
 
-def pecah_nama(nama: str) -> tuple[str, str]:
-    """Mengembalikan (nama_tanpa_ekstensi, ekstensi_termasuk_titik)."""
-    akar, ext = os.path.splitext(nama)
-    return akar, ext
+    if not teks:
+        teks = "berkas"
 
-def buat_nama_baru(nama_asli: str, pola: str) -> str:
-    """Menghasilkan nama berkas baru berdasarkan pola."""
-    akar, ext = pecah_nama(nama_asli)
-    slug = buat_slug(akar)
-    return pola.format(slug=slug, nama_asli=nama_asli, ext=ext)
+    return teks + suffix
 
-def parse_args(argv=None) -> argparse.Namespace:
+
+def kumpulkan_berkas(folder: Path, pola: str) -> list[Path]:
+    """Kumpulkan berkas yang cocok dengan pola di folder."""
+    hasil = []
+    for path in sorted(folder.glob(pola)):
+        if path.is_file():
+            hasil.append(path)
+    return hasil
+
+
+def buat_rencana(berkas: list[Path]) -> tuple[list[tuple[Path, Path]], list[tuple[Path, str]]]:
+    """Buat rencana penggantian nama.
+
+    Kembalikan (rencana, konflik) di mana rencana adalah daftar (lama, baru)
+    dan konflik adalah daftar (berkas, alasan) yang tidak bisa diproses.
+    """
+    rencana: list[tuple[Path, Path]] = []
+    konflik: list[tuple[Path, str]] = []
+    target_terpakai: set[Path] = set()
+
+    for path in berkas:
+        baru = path.with_name(slugify(path.name))
+
+        if baru == path:
+            continue
+
+        if baru in target_terpakai or baru.exists():
+            konflik.append((path, f"target sudah ada: {baru.name}"))
+            continue
+
+        if not path.name.isascii():
+            pass
+
+        target_terpakai.add(baru)
+        rencana.append((path, baru))
+
+    return rencana, konflik
+
+
+def jalankan(rencana: list[tuple[Path, Path]], dry_run: bool) -> tuple[int, int]:
+    """Jalankan penggantian nama. Kembalikan (sukses, gagal)."""
+    sukses = 0
+    gagal = 0
+
+    for lama, baru in rencana:
+        if dry_run:
+            print(f"SIMULASI  {lama.name} -> {baru.name}")
+            sukses += 1
+            continue
+        try:
+            lama.rename(baru)
+        except OSError as exc:
+            print(f"GAGAL     {lama.name}: {exc}", file=sys.stderr)
+            gagal += 1
+            continue
+        print(f"OK        {lama.name} -> {baru.name}")
+        sukses += 1
+
+    return sukses, gagal
+
+
+def buat_parser() -> argparse.ArgumentParser:
+    """Bangun parser argparse dengan --help berbahasa Indonesia."""
     parser = argparse.ArgumentParser(
+        prog="slugger.py",
         description="Ganti nama berkas massal menjadi slug aman.",
-        epilog="Contoh: slugger.py --dry-run --pola '{slug}{ext}' folder/",
+        epilog="Contoh: slugger.py ./data --dry-run --pola '*.txt'",
     )
     parser.add_argument(
-        "path",
-        nargs="+",
-        help="Berkas atau direktori yang akan diproses. Direktori diproses non-rekursif.",
+        "folder",
+        nargs="?",
+        default=".",
+        help="Folder yang berisi berkas (default: direktori saat ini).",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Tampilkan rencana perubahan tanpa mengganti nama berkas.",
+        help="Tampilkan rencana perubahan tanpa mengubah berkas.",
     )
     parser.add_argument(
         "--pola",
-        default="{slug}{ext}",
-        help="Pola nama baru (default: '{slug}{ext}'). Placeholder: {slug}, {nama_asli}, {ext}.",
+        default="*",
+        help="Pola glob untuk memilih berkas (default: '*').",
     )
-    return parser.parse_args(argv)
+    return parser
 
-def kumpulkan_berkas(paths: list[str]) -> tuple[list[str], list[str]]:
-    """Mengumpulkan daftar berkas dari path yang diberikan.
 
-    Mengembalikan (daftar_berkas, daftar_kesalahan).
-    """
-    berkas = []
-    kesalahan = []
-    for p in paths:
-        if not os.path.exists(p):
-            kesalahan.append(f"ERROR: tidak ditemukan: {p}")
-            continue
-        if os.path.isdir(p):
-            try:
-                for nama in sorted(os.listdir(p)):
-                    full = os.path.join(p, nama)
-                    if os.path.isfile(full):
-                        berkas.append(full)
-            except OSError as e:
-                kesalahan.append(f"ERROR: tidak bisa membaca direktori {p}: {e}")
-        elif os.path.isfile(p):
-            berkas.append(p)
-        else:
-            kesalahan.append(f"ERROR: bukan berkas biasa: {p}")
-    return berkas, kesalahan
+def main(argv: list[str] | None = None) -> int:
+    """Titik masuk utama CLI."""
+    parser = buat_parser()
+    args = parser.parse_args(argv)
 
-def cek_akses_berkas(path: str) -> str | None:
-    """Mengembalikan pesan error jika berkas tidak bisa dibaca, else None."""
-    if not os.access(path, os.R_OK):
-        return f"ERROR: tidak bisa membaca berkas: {path}"
+    folder = Path(args.folder)
+    if not folder.exists():
+        print(f"ERROR: folder tidak ditemukan: {folder}", file=sys.stderr)
+        return 2
+    if not folder.is_dir():
+        print(f"ERROR: bukan folder: {folder}", file=sys.stderr)
+        return 2
     try:
-        with open(path, "rb"):
-            pass
-    except OSError as e:
-        return f"ERROR: gagal membuka berkas {path}: {e}"
-    return None
+        list(folder.iterdir())
+    except PermissionError:
+        print(f"ERROR: tidak bisa membaca folder: {folder}", file=sys.stderr)
+        return 2
 
-def proses(berkas: list[str], pola: str, dry_run: bool) -> int:
-    """Memproses penggantian nama. Mengembalikan exit code."""
-    rencana = []
-    gagal = False
-    for lama in berkas:
-        err = cek_akses_berkas(lama)
-        if err:
-            print(err)
-            gagal = True
-            continue
-        direktori = os.path.dirname(lama) or "."
-        nama_lama = os.path.basename(lama)
-        nama_baru = buat_nama_baru(nama_lama, pola)
-        if nama_baru == nama_lama:
-            print(f"LEWATI: {lama}")
-            continue
-        tujuan = os.path.join(direktori, nama_baru)
-        if os.path.exists(tujuan):
-            print(f"ERROR: tujuan sudah ada, menolak menimpa: {tujuan}")
-            gagal = True
-            continue
-        rencana.append((lama, tujuan, nama_lama, nama_baru))
+    try:
+        berkas = kumpulkan_berkas(folder, args.pola)
+    except OSError as exc:
+        print(f"ERROR: gagal membaca folder: {exc}", file=sys.stderr)
+        return 2
+
+    rencana, konflik = buat_rencana(berkas)
+
+    print(f"Folder    : {folder}")
+    print(f"Pola      : {args.pola}")
+    print(f"Mode      : {'SIMULASI' if args.dry_run else 'TERAPKAN'}")
+    print(f"Ditemukan : {len(berkas)} berkas")
+    print(f"Rencana   : {len(rencana)} perubahan")
+    print(f"Konflik   : {len(konflik)}")
+
+    for path, alasan in konflik:
+        print(f"TOLAK     {path.name}: {alasan}")
 
     if not rencana:
-        print("TIDAK ADA PERUBAHAN")
-        return EXIT_FILE_ERROR if gagal else EXIT_OK
+        print("TIDAK ADA perubahan yang perlu dilakukan.")
+        return 0
 
-    for lama, tujuan, nama_lama, nama_baru in rencana:
-        print(f"SEBELUM: {lama}")
-        print(f"SESUDAH: {tujuan}")
-        if dry_run:
-            print("AKSI: dry-run (tidak diubah)")
-        else:
-            try:
-                os.rename(lama, tujuan)
-                print("AKSI: diubah")
-            except OSError as e:
-                print(f"ERROR: gagal mengganti nama {lama}: {e}")
-                gagal = True
+    sukses, gagal = jalankan(rencana, args.dry_run)
 
-    if dry_run:
-        print("RINGKASAN: mode dry-run, tidak ada berkas diubah")
-    else:
-        print(f"RINGKASAN: {len(rencana)} berkas diproses")
-    return EXIT_FILE_ERROR if gagal else EXIT_OK
+    print(f"Selesai   : {sukses} sukses, {gagal} gagal, {len(konflik)} ditolak")
+    return 0 if gagal == 0 else 1
 
-def main(argv=None) -> int:
-    args = parse_args(argv)
-    berkas, kesalahan = kumpulkan_berkas(args.path)
-    for pesan in kesalahan:
-        print(pesan)
-    if not berkas:
-        print("TIDAK ADA BERKAS YANG DIPROSES")
-        return EXIT_FILE_ERROR
-    return proses(berkas, args.pola, args.dry_run)
 
 if __name__ == "__main__":
     sys.exit(main())

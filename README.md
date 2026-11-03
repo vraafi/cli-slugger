@@ -1,57 +1,49 @@
-# slugger
+# Slugger
 
 Alat CLI Python 3.11 untuk mengganti nama berkas massal menjadi slug aman.
+Hanya memakai pustaka standar, tanpa dependensi.
 
-## Instalasi
+## Pemakaian
 
-Tidak perlu dependensi. Cukup Python 3.11+.
-
-```bash
-python slugger.py --help
+```
+python slugger.py [folder] [--dry-run] [--pola GLOB]
 ```
 
-## Penggunaan
+- `folder` — folder berisi berkas (default: direktori saat ini).
+- `--dry-run` — simulasi, tidak mengubah berkas.
+- `--pola` — pola glob pemilihan berkas (default: `*`).
 
-```bash
-python slugger.py [--dry-run] [--pola POLA] path [path ...]
+Contoh:
+
+```
+python slugger.py ./data --dry-run --pola "*.txt"
+python slugger.py ./data --pola "*.jpg"
 ```
 
-- `path`: berkas atau direktori. Direktori diproses non-rekursif (hanya berkas langsung di dalamnya).
-- `--dry-run`: tampilkan laporan sebelum/sesudah tanpa mengubah berkas.
-- `--pola`: format nama baru. Default `{slug}{ext}`.
-  Placeholder: `{slug}`, `{nama_asli}`, `{ext}`.
+## Perilaku
 
-## Contoh
+- Nama diubah menjadi huruf kecil, karakter non-alfanumerik diganti tanda hubung.
+- Ekstensi dipertahankan (huruf kecil).
+- Berkas yang targetnya sudah ada akan ditolak (tidak menimpa).
+- Konflik dan status dicetak ke keluaran standar dalam format ringkas yang mudah diparse.
+- Galat folder/berkas tidak ada atau tidak bisa dibaca menghasilkan exit code 2
+  dengan pesan jelas di stderr.
 
-```bash
-# Pratinjau perubahan
-python slugger.py --dry-run "File Saya (1).txt"
+## Kode keluar
 
-# Ganti nama dengan slug
-python slugger.py "File Saya (1).txt"
+- `0` — sukses (termasuk simulasi).
+- `1` — ada kegagalan saat mengganti nama.
+- `2` — galat input (folder tidak ada / tidak bisa dibaca).
 
-# Ganti nama semua berkas di folder dengan format khusus
-python slugger.py --pola "{slug}-baru{ext}" folder/
+## Contoh keluaran
+
 ```
-
-## Keluaran
-
-Keluaran dapat diparse baris per baris dengan prefiks:
-
-- `SEBELUM: <path>`
-- `SESUDAH: <path>`
-- `AKSI: diubah` / `AKSI: dry-run (tidak diubah)`
-- `LEWATI: <path>` (nama sudah sama)
-- `ERROR: ...`
-- `RINGKASAN: ...`
-
-## Exit Code
-
-- `0`: berhasil (termasuk dry-run).
-- `1`: kesalahan umum (tidak dipakai saat ini).
-- `2`: berkas tidak ada/tidak bisa dibaca, atau tujuan bentrok (menolak menimpa).
-
-## Keamanan
-
-- Menolak menimpa berkas yang sudah ada (exit code 2).
-- `--help` tidak memiliki efek samping.
+Folder    : data
+Pola      : *.txt
+Mode      : TERAPKAN
+Ditemukan : 2 berkas
+Rencana   : 1 perubahan
+Konflik   : 0
+OK        Halo Dunia!.txt -> halo-dunia.txt
+Selesai   : 1 sukses, 0 gagal, 0 ditolak
+```

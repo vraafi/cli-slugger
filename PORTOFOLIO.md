@@ -1,14 +1,19 @@
 ## Masalah
-Mengganti nama berkas massal secara manual rawan salah dan berisiko menimpa berkas yang sudah ada. Tim butuh alat kecil yang aman, dapat diperiksa dulu, dan tidak menghapus data tanpa persetujuan.
+
+Mengganti nama berkas massal secara manual rawan salah dan bisa menimpa berkas yang sudah ada. Tim butuh alat yang aman, dapat diuji tanpa risiko, dan memberi laporan jelas.
 
 ## Yang Dibangun
-`slugger` adalah CLI Python yang mengubah nama berkas menjadi slug aman. Fitur inti: `--dry-run`, `--pola` untuk aturan penggantian, laporan sebelum/sesudah, dan penolakan menimpa berkas. Repositori berisi `README.md` 1394 B dan `slugger.py` 5665 B.
+
+slugger, CLI untuk mengganti nama berkas menjadi slug aman. Fitur inti: `--dry-run` untuk pratinjau, `--pola` untuk aturan penggantian, laporan sebelum/sesudah, dan penolakan menimpa berkas yang sudah ada. Kode ditulis dalam satu berkas Python `slugger.py` (5264 B) dengan dokumentasi `README.md` (1338 B).
 
 ## Keputusan Teknis
-Semua logika ditempatkan di satu berkas Python (`slugger.py`) agar mudah diaudit dan dipasang. Mode `--dry-run` menjadi jalur default pemeriksaan: pengguna melihat rencana perubahan sebelum eksekusi. Penolakan menimpa berkas dijalankan sebelum penulisan, bukan setelah. Pola kustom dipisahkan dari logika slug dasar.
+
+Kami pisahkan pratinjau dari eksekusi. `--dry-run` menghasilkan laporan sebelum/sesudah tanpa menyentuh berkas. Penolakan menimpa berkas menjadi pengaman bawaan, bukan opsi. Pola penggantian dibuat eksplisit lewat `--pola` agar perilaku dapat diprediksi dan diuji.
 
 ## Bukti
-QC lapis kode aktif dan lulus. Waktu QC 0,58 detik dengan 0 temuan. Komposisi kode: 1 berkas Python, 1 berkas lain; tanpa JS, JSON, atau Lua.
+
+QC lapis kode aktif dan lulus. Total temuan: 0. Waktu QC: 1,09 detik. Berkas kode: 1 Python, 0 JavaScript, 0 JSON, 0 Lua, 1 lain.
 
 ## Batasan
-QC baru mencakup lapis kode, belum lapis integrasi atau uji beban. Alat ini menangani berkas lokal, bukan sistem terdistribusi. Kami belum menguji di direktori besar atau nama berkas non-ASCII ekstrem.
+
+QC baru mencakup lapis kode. Lapis lain belum aktif. Alat ini berfokus pada penggantian nama berkas, bukan validasi isi berkas.

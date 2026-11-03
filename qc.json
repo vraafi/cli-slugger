@@ -31,8 +31,8 @@
     "lain": 1
    },
    "jumlah_diperiksa": 2,
-   "detik": 0.58,
-   "diperiksa": "2026-11-03T13:49:33+07:00"
+   "detik": 1.09,
+   "diperiksa": "2026-11-03T14:01:47+07:00"
   },
   "visual": {
    "lapis": "visual",
@@ -42,7 +42,7 @@
    "vonis": "tidak berlaku",
    "temuan": [],
    "sebab": "tidak ada URL UI",
-   "diperiksa": "2026-11-03T13:49:33+07:00"
+   "diperiksa": "2026-11-03T14:01:47+07:00"
   },
   "pengguna": {
    "lapis": "pengguna",
@@ -52,17 +52,17 @@
    "vonis": "tidak berlaku",
    "temuan": [],
    "sebab": "tidak ada URL UI",
-   "diperiksa": "2026-11-03T13:49:33+07:00"
+   "diperiksa": "2026-11-03T14:01:47+07:00"
   }
  },
- "detik": 0.58,
- "diperiksa": "2026-11-03T13:49:33+07:00",
+ "detik": 1.09,
+ "diperiksa": "2026-11-03T14:01:47+07:00",
  "target": "C:\\Users\\user\\otonom-penuh\\workspace\\trust-test\\cli-slugger",
  "url": null,
  "uji_jalan": {
   "ok": true,
   "kode": 0,
-  "keluaran": "usage: slugger.py [-h] [--dry-run] [--pola POLA] path [path ...]\n\nGanti nama berkas massal menjadi slug aman.\n\npositional arguments:\n  path         Berkas atau direktori yang akan diproses. Direktori diproses\n               non-rekursif.\n\noptions:\n  -h, --help   show this help message and exit\n  --dry-run    Tampilkan rencana perubahan tanpa mengganti nama berkas.\n  --pola POLA  Pola nama baru (de",
+  "keluaran": "usage: slugger.py [-h] [--dry-run] [--pola POLA] [folder]\n\nGanti nama berkas massal menjadi slug aman.\n\npositional arguments:\n  folder       Folder yang berisi berkas (default: direktori saat ini).\n\noptions:\n  -h, --help   show this help message and exit\n  --dry-run    Tampilkan rencana perubahan tanpa mengubah berkas.\n  --pola POLA  Pola glob untuk memilih berkas (default: '*').\n\nContoh: slugger.",
   "galat": ""
  }
 }
