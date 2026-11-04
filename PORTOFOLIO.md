@@ -1,19 +1,14 @@
 ## Masalah
-
-Mengganti nama berkas massal secara manual rawan salah dan bisa menimpa berkas yang sudah ada. Tim butuh alat yang aman, dapat diuji tanpa risiko, dan memberi laporan jelas.
+Penggantian nama berkas massal sering menghasilkan nama tidak aman: spasi, karakter non-ASCII, dan huruf besar. Risiko lain: menimpa berkas yang sudah ada. Tim butuh alat yang dapat diprediksi dan aman.
 
 ## Yang Dibangun
-
-slugger, CLI untuk mengganti nama berkas menjadi slug aman. Fitur inti: `--dry-run` untuk pratinjau, `--pola` untuk aturan penggantian, laporan sebelum/sesudah, dan penolakan menimpa berkas yang sudah ada. Kode ditulis dalam satu berkas Python `slugger.py` (5264 B) dengan dokumentasi `README.md` (1338 B).
+Slugger, CLI untuk mengubah nama berkas menjadi slug aman. Fitur: --dry-run, --pola, laporan sebelum/sesudah, dan penolakan menimpa berkas. Berkas hasil: README.md (1118 B) dan slugger.py (6431 B).
 
 ## Keputusan Teknis
+Kode Python dipilih agar mudah diaudit dan dijalankan di lingkungan mana pun. Mode --dry-run memungkinkan pratinjau tanpa perubahan. Pola kustom memberi kendali. Penolakan menimpa mencegah kehilangan data.
 
-Kami pisahkan pratinjau dari eksekusi. `--dry-run` menghasilkan laporan sebelum/sesudah tanpa menyentuh berkas. Penolakan menimpa berkas menjadi pengaman bawaan, bukan opsi. Pola penggantian dibuat eksplisit lewat `--pola` agar perilaku dapat diprediksi dan diuji.
-
-## Bukti
-
-QC lapis kode aktif dan lulus. Total temuan: 0. Waktu QC: 1,09 detik. Berkas kode: 1 Python, 0 JavaScript, 0 JSON, 0 Lua, 1 lain.
+## Bukti (angka QC)
+QC lapis kode lulus dalam 0,41 detik. Temuan: 0. Berkas kode: 1 Python, 1 JSON, 4 lain. Lapis aktif: kode.
 
 ## Batasan
-
-QC baru mencakup lapis kode. Lapis lain belum aktif. Alat ini berfokus pada penggantian nama berkas, bukan validasi isi berkas.
+QC hanya mencakup lapis kode. Belum ada uji lapis integrasi atau antarmuka. Alat ini tidak menangani konflik nama secara otomatis; pengguna harus menentukan pola atau menghapus berkas yang bentrok.

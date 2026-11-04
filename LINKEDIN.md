@@ -1,11 +1,1 @@
-Kami uji slugger pada lapis kode. Hasilnya: lulus, 0 temuan, 1,09 detik QC.
-
-slugger adalah CLI untuk mengganti nama berkas massal menjadi slug aman. Ada --dry-run untuk pratinjau, --pola untuk aturan penggantian, dan laporan sebelum/sesudah. Berkas yang sudah ada ditolak untuk ditimpa. Itu pengaman bawaan, bukan opsi tambahan.
-
-Kode ditulis dalam satu berkas Python 5264 B. Dokumentasi README.md 1338 B. QC mencakup 1 berkas Python, 0 JavaScript, 0 JSON, 0 Lua, dan 1 lain.
-
-Batasan kami nyatakan terbuka: QC baru aktif di lapis kode. Lapis lain belum masuk cakupan.
-
-Jalankan `slugger --dry-run` pada satu folder kerja Anda hari ini dan periksa laporannya.
-
-#CLI #Otomasi #KualitasKode
+0,41 detik. 0 temuan. QC lapis kode lulus untuk Slugger, CLI ganti nama berkas massal. Kami bangun alat ini karena nama berkas yang berantakan menghambat otomasi dan memicu risiko timpa. Slugger mengubah nama menjadi slug aman, punya --dry-run, --pola, laporan sebelum/sesudah, dan menolak menimpa berkas. Kode Python 6431 B, README 1118 B. QC hanya mencakup lapis kode; lapis integrasi belum diuji. Kami tidak menjual lebih dari bukti. Jalankan --dry-run pada satu direktori hari ini, lalu laporkan berkas yang bentrok. #CLI #Python #QC

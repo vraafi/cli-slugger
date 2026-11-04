@@ -1,3 +1,1 @@
-- Membangun CLI slugger.py untuk ganti nama berkas massal dengan mode dry-run dan pola.
-- Menjalankan QC lapis kode dalam 1,09 detik dengan 0 temuan.
-- Menyusun README.md 1338 B dan kode 5264 B dengan laporan sebelum/sesudah.
+['Membangun Slugger CLI Python untuk ganti nama massal aman.', 'Menyelesaikan QC lapis kode dalam 0,41 detik tanpa temuan.', 'Menyediakan --dry-run, --pola, laporan sebelum/sesudah, tolak timpa.']

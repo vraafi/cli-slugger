@@ -26,13 +26,13 @@
    "jumlah_berkas": {
     "py": 1,
     "js": 0,
-    "json": 0,
+    "json": 1,
     "lua": 0,
-    "lain": 1
+    "lain": 4
    },
-   "jumlah_diperiksa": 2,
-   "detik": 1.09,
-   "diperiksa": "2026-11-03T14:01:47+07:00"
+   "jumlah_diperiksa": 6,
+   "detik": 0.41,
+   "diperiksa": "2026-11-04T21:25:00+07:00"
   },
   "visual": {
    "lapis": "visual",
@@ -42,7 +42,7 @@
    "vonis": "tidak berlaku",
    "temuan": [],
    "sebab": "tidak ada URL UI",
-   "diperiksa": "2026-11-03T14:01:47+07:00"
+   "diperiksa": "2026-11-04T21:25:00+07:00"
   },
   "pengguna": {
    "lapis": "pengguna",
@@ -52,17 +52,24 @@
    "vonis": "tidak berlaku",
    "temuan": [],
    "sebab": "tidak ada URL UI",
-   "diperiksa": "2026-11-03T14:01:47+07:00"
+   "diperiksa": "2026-11-04T21:25:00+07:00"
   }
  },
- "detik": 1.09,
- "diperiksa": "2026-11-03T14:01:47+07:00",
+ "override_deterministik": {
+  "diterapkan": false,
+  "hijau": true,
+  "dibatalkan": [],
+  "bertahan": [],
+  "catatan": ""
+ },
+ "detik": 0.41,
+ "diperiksa": "2026-11-04T21:25:00+07:00",
  "target": "C:\\Users\\user\\otonom-penuh\\workspace\\trust-test\\cli-slugger",
  "url": null,
  "uji_jalan": {
   "ok": true,
   "kode": 0,
-  "keluaran": "usage: slugger.py [-h] [--dry-run] [--pola POLA] [folder]\n\nGanti nama berkas massal menjadi slug aman.\n\npositional arguments:\n  folder       Folder yang berisi berkas (default: direktori saat ini).\n\noptions:\n  -h, --help   show this help message and exit\n  --dry-run    Tampilkan rencana perubahan tanpa mengubah berkas.\n  --pola POLA  Pola glob untuk memilih berkas (default: '*').\n\nContoh: slugger.",
+  "keluaran": "usage: slugger [-h] [--dry-run] [--pola POLA] folder\n\nGanti nama berkas massal menjadi slug aman.\n\npositional arguments:\n  folder       Folder tempat berkas akan diganti nama (non-rekursif).\n\noptions:\n  -h, --help   show this help message and exit\n  --dry-run    Tampilkan laporan sebelum/sesudah tanpa mengubah berkas.\n  --pola POLA  Pola glob untuk memilih berkas (default: *).\n\nContoh: slugger --d",
   "galat": ""
  }
 }
