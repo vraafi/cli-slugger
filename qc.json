@@ -1,1 +1,75 @@
-{}
+{
+ "tri_layer": true,
+ "lulus": true,
+ "sah": true,
+ "vonis": "terima",
+ "bounce_ke": null,
+ "ringkas": "semua lapis lulus",
+ "lapis": {
+  "kode": {
+   "lapis": "kode",
+   "lulus": true,
+   "sah": true,
+   "vonis": "terima",
+   "temuan": [],
+   "catatan": [
+    "camus tidak dijalankan: target bukan proyek Node"
+   ],
+   "pembuat": "project-executor",
+   "peninjau": "quality-control-panel",
+   "camus": {
+    "ok": false,
+    "sah": false,
+    "tidak_berlaku": true,
+    "sebab": "target bukan proyek Node (tanpa package.json) — camus tidak berlaku"
+   },
+   "jumlah_berkas": {
+    "py": 1,
+    "js": 0,
+    "json": 1,
+    "lua": 0,
+    "lain": 4
+   },
+   "jumlah_diperiksa": 6,
+   "detik": 1.47,
+   "diperiksa": "2026-11-09T10:19:41+07:00"
+  },
+  "visual": {
+   "lapis": "visual",
+   "tidak_berlaku": true,
+   "lulus": true,
+   "sah": null,
+   "vonis": "tidak berlaku",
+   "temuan": [],
+   "sebab": "tidak ada URL UI",
+   "diperiksa": "2026-11-09T10:19:41+07:00"
+  },
+  "pengguna": {
+   "lapis": "pengguna",
+   "tidak_berlaku": true,
+   "lulus": true,
+   "sah": null,
+   "vonis": "tidak berlaku",
+   "temuan": [],
+   "sebab": "tidak ada URL UI",
+   "diperiksa": "2026-11-09T10:19:41+07:00"
+  }
+ },
+ "override_deterministik": {
+  "diterapkan": false,
+  "hijau": true,
+  "dibatalkan": [],
+  "bertahan": [],
+  "catatan": ""
+ },
+ "detik": 1.48,
+ "diperiksa": "2026-11-09T10:19:41+07:00",
+ "target": "C:\\Users\\user\\otonom-penuh\\workspace\\trust-test\\cli-slugger",
+ "url": null,
+ "uji_jalan": {
+  "ok": true,
+  "kode": 0,
+  "keluaran": "usage: slugger [-h] [-p POLA] [-d] [berkas ...]\n\nUbah nama berkas secara massal menjadi format slug aman (URL-safe).\n\npositional arguments:\n  berkas           Daftar berkas atau direktori yang akan diproses.\n\noptions:\n  -h, --help       show this help message and exit\n  -p, --pola POLA  Pola pencarian berkas (glob pattern), contoh: '*.jpg' atau\n                   'dokumen/*.pdf'.\n  -d, --dry-run  ",
+  "galat": ""
+ }
+}

@@ -1,14 +1,14 @@
-## Masalah
-Penggantian nama berkas massal sering menghasilkan nama tidak aman: spasi, karakter non-ASCII, dan huruf besar. Risiko lain: menimpa berkas yang sudah ada. Tim butuh alat yang dapat diprediksi dan aman.
+### Masalah
+Nama berkas yang tidak standar mengganggu otomatisasi alur kerja dan berisiko menimpa data penting.
 
-## Yang Dibangun
-Slugger, CLI untuk mengubah nama berkas menjadi slug aman. Fitur: --dry-run, --pola, laporan sebelum/sesudah, dan penolakan menimpa berkas. Berkas hasil: README.md (1118 B) dan slugger.py (6431 B).
+### Yang Dibangun
+Kami membangun `slugger`, sebuah CLI untuk mengganti nama berkas massal menjadi slug yang aman secara cepat dan terprediksi.
 
-## Keputusan Teknis
-Kode Python dipilih agar mudah diaudit dan dijalankan di lingkungan mana pun. Mode --dry-run memungkinkan pratinjau tanpa perubahan. Pola kustom memberi kendali. Penolakan menimpa mencegah kehilangan data.
+### Keputusan Teknis
+Kami mengimplementasikan opsi `--dry-run` untuk simulasi tanpa risiko dan `--pola` untuk penyesuaian format nama. Sistem menghasilkan laporan transparan sebelum dan sesudah eksekusi, serta menolak keras operasi yang menimpa berkas yang ada. Kode utama tersimpan dalam `slugger.py` (4183 B) dan didokumentasikan pada `README.md` (1543 B).
 
-## Bukti (angka QC)
-QC lapis kode lulus dalam 0,41 detik. Temuan: 0. Berkas kode: 1 Python, 1 JSON, 4 lain. Lapis aktif: kode.
+### Bukti
+Pemeriksaan kualitas pada 1 lapis aktif (kode) selesai dalam 1,48 detik dengan 0 temuan dari total 6 berkas yang diperiksa (1 Python, 1 JSON, dan 4 berkas pendukung).
 
-## Batasan
-QC hanya mencakup lapis kode. Belum ada uji lapis integrasi atau antarmuka. Alat ini tidak menangani konflik nama secara otomatis; pengguna harus menentukan pola atau menghapus berkas yang bentrok.
+### Batasan
+Perangkat ini beroperasi secara lokal melalui antarmuka baris perintah tanpa integrasi penyimpan awan bawaan.

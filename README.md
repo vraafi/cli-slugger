@@ -1,43 +1,50 @@
-# slugger
+# Slugger
 
-Alat CLI Python 3.11 untuk mengganti nama berkas massal menjadi slug yang aman.
-Hanya menggunakan pustaka standar, tanpa dependensi.
+Alat CLI Python 3.11 untuk mengubah nama berkas secara massal menjadi format *slug* yang aman (URL-safe).
 
-## Fitur
+## Fitur Utama
 
-- Mengubah nama berkas menjadi slug: huruf kecil, pemisah `-`, hanya `[a-z0-9-]`.
-- `--dry-run` untuk melihat rencana tanpa mengubah berkas.
-- `--pola` untuk memilih berkas dengan glob (default `*`).
-- Laporan `SEBELUM` / `SESUDAH` yang bisa diparse.
-- Menolak menimpa berkas yang sudah ada (exit code 3).
+- **Tanpa Dependensi Eksternal**: Hanya menggunakan pustaka standar Python 3.11.
+- **Simulasi Mode (`--dry-run`)**: Menampilkan laporan perubahan tanpa mengubah berkas asli.
+- **Pencarian Pola (`--pola`)**: Mendukung pencarian berkas menggunakan pola glob.
+- **Pencegahan Menimpa Berkas**: Menolak mengubah nama jika berkas tujuan sudah ada.
+- **Format Laporan Ringkas**: Output berupa baris yang mudah diparse (TSV: Status, Asal, Tujuan).
+- **Penanganan Kesalahan Jelas**: Mengembalikan *exit code* `2` untuk berkas tidak ada / tidak dapat dibaca.
 
-## Pemakaian
+## Penggunaan
 
-```sh
-python slugger.py --help
-python slugger.py --dry-run --pola '*.txt' ./data
-python slugger.py --pola '*.jpg' ./gambar
+### Mengubah Berkas Langsung
+```bash
+python3 slugger.py "Laporan Akhir (2023).pdf" "Foto Liburan 1.JPG"
 ```
 
-## Keluaran
-
-Baris `KUNCI: nilai`, misalnya:
-
-```
-MODE: dry-run
-JUMLAH_DIPROSES: 2
-SEBELUM: Laporan Tahunan!.pdf
-SESUDAH: laporan-tahunan.pdf
-STATUS: rencana
+### Menggunakan Pola Pencarian (Glob)
+```bash
+python3 slugger.py --pola "dokumen/*.txt"
 ```
 
-## Exit code
+### Mode Simulasi (Dry Run)
+```bash
+python3 slugger.py --pola "*.png" --dry-run
+```
 
-- `0` sukses (termasuk dry-run).
-- `2` folder/berkas tidak ada atau tidak dapat dibaca.
-- `3` tabrakan nama atau akan menimpa berkas.
+### Menampilkan Bantuan
+```bash
+python3 slugger.py --help
+```
 
-## Catatan
+## Format Keluaran
 
-Operasi hanya pada satu folder (non-rekursif). Nama yang sudah cocok slug
-tidak diubah. Jika dua berkas menghasilkan slug sama, proses dibatalkan.
+Keluaran menggunakan format terpisah tab (TSV):
+
+```
+BERHASIL	dokumen/Laporan Akhir.txt	dokumen/laporan-akhir.txt
+TETAP	dokumen/laporan-baru.txt	dokumen/laporan-baru.txt
+SIMULASI	dokumen/Foto (1).jpg	dokumen/foto-1.jpg
+```
+
+## Kode Keluar (Exit Codes)
+
+- `0`: Berhasil dieksekusi tanpa kendala.
+- `1`: Terjadi kesalahan saat mengubah nama berkas.
+- `2`: Berkas tidak ditemukan, tidak dapat dibaca, atau argumen tidak valid.
